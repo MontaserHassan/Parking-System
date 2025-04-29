@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stripe Payment</title>
+</head>
+
+<body>
+    <h1>Stripe Payment</h1>
+
+    <form id="payment-form" action="http://localhost:4040/api/payment" method="POST">
+        <button type="submit">Pay Now</button>
+    </form>
+
+    <script>
+        document.getElementById("payment-form").addEventListener("submit", async (event) => {
+            event.preventDefault();
+            try {
+                const response = await fetch("http://localhost:4040/api/payment", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": "Bearer " + localStorage.getItem("token")
+                    },
+                    body: JSON.stringify({}),
+                });
+                const data = await response.json();
+                if (data && data.responseCode === 201) {
+                    window.location.href = data.data.paymentRedirectUrl;
+                } else {
+                    throw new Error(data.responseMessage);
+                };
+            } catch (error) {
+                console.error("Error:", error);
+                alert(error);
+            }
+        });
+    </script>
+</body>
+
+</html>
