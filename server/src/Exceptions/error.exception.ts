@@ -54,12 +54,15 @@ export default class ValidationExceptionFilter implements ExceptionFilter {
         };
 
         const Response = {
+            path: request.url,
+            method: request.method,
+            status: 'error',
+            appName: process.env.APP_NAME,
+            timestamp: formatDate(new Date()),
             responseCode: status,
             responseMessage: await handleResponseMessage(lang, message),
             fields: fields,
             details: details,
-            path: request.url,
-            timestamp: formatDate(new Date),
         };
         response.locals = Response;
         if (isProd) logger.error(`Error at path: ${Response.path}`, { request, response, requestNumberTrace: request.requestNumberTrace }, Response);

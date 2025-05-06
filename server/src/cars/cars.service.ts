@@ -18,7 +18,7 @@ export default class CarsService {
 
     async create(createCarDto: CreateCarDto) {
         const newCar = await this.carModel.create(createCarDto);
-        return newCar;
+        return await this.findById(newCar._id.toString());
     };
 
     async totalCars(filterCarDataDto: FilterCarDataDto): Promise<number> {
@@ -27,17 +27,17 @@ export default class CarsService {
     };
 
     async findWithPagination(filterCarDataDto: FilterCarDataDto, limit: number, skip: number): Promise<Car[]> {
-        const totalCars = this.carModel.find(filterCarDataDto).sort({ licensePlate: 1 }).limit(limit).skip(skip).select('-__v');
+        const totalCars = await this.carModel.find(filterCarDataDto).sort({ licensePlate: 1 }).limit(limit).skip(skip).populate('parkingPlace').select('-__v');
         return totalCars;
     };
 
     async findAll() {
-        const cars = await this.carModel.find().sort({ licensePlate: 1 }).select('-__v');
+        const cars = await this.carModel.find().sort({ licensePlate: 1 }).populate('parkingPlace').select('-__v');
         return cars;
     };
 
     async findOne(filterCarDataDto: FilterCarDataDto) {
-        const car = await this.carModel.findOne(filterCarDataDto).select('-__v');
+        const car = await this.carModel.findOne(filterCarDataDto).populate('parkingPlace').select('-__v');
         return car;
     };
 
@@ -48,17 +48,17 @@ export default class CarsService {
 
     async findOneByProps(filterCarDataDto: Partial<FilterCarDataDto>) {
         const orConditions = Object.entries(filterCarDataDto).map(([key, value]) => ({ [key]: value }));
-        const requestData = await this.carModel.findOne({ $or: orConditions }).select('-__v');
+        const requestData = await this.carModel.findOne({ $or: orConditions }).populate('parkingPlace').select('-__v');
         return requestData;
     };
 
     async findById(carId: string) {
-        const car = await this.carModel.findById(carId).select('-__v');
+        const car = await this.carModel.findById(carId).populate('parkingPlace').select('-__v');
         return car;
     };
 
     async update(updateCarDto: UpdateCarDto) {
-        const updatedCar = await this.carModel.findByIdAndUpdate(updateCarDto.carId, updateCarDto, { new: true }).select('-__v');
+        const updatedCar = await this.carModel.findByIdAndUpdate(updateCarDto.carId, updateCarDto, { new: true }).populate('parkingPlace').select('-__v');
         return updatedCar;
     };
 
@@ -68,7 +68,7 @@ export default class CarsService {
     };
 
     async updateByProps(updateCarByPropsDto: UpdateCarByPropsDto) {
-        const updatedCar = await this.carModel.findOneAndUpdate({ [updateCarByPropsDto.propName]: updateCarByPropsDto.propValue }, updateCarByPropsDto, { new: true }).select('-__v');
+        const updatedCar = await this.carModel.findOneAndUpdate({ [updateCarByPropsDto.propName]: updateCarByPropsDto.propValue }, updateCarByPropsDto, { new: true }).populate('parkingPlace').select('-__v');
         return updatedCar;
     };
 

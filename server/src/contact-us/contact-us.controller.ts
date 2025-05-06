@@ -17,6 +17,7 @@ export default class ContactUsController {
     try {
       const messageId = this.util.generateId();
       createContactUsDto.messageId = messageId;
+      // send mail
       const response = {
         responseCode: 200,
         responseMessage: `Your Request was created successfully and the request number is ${messageId}`,

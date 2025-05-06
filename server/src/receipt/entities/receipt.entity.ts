@@ -3,28 +3,34 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 
 import { ParkingPlace } from 'src/parking-place/entities/parking-place.entity';
-import { Receipt } from 'src/receipt/entities/receipt.entity';
-import { formatDate } from '../../helpers/helper-functions.helper';
+import { Car } from 'src/cars/entities/car.entity';
+import { Fees } from 'src/fees/entities/fee.entity';
+import { formatDate, generatedId } from '../../helpers/helper-functions.helper';
 import Status from 'src/Interfaces/status.interface';
 
 
 
-type CarDocument = Car & Document;
+type ReceiptDocument = Receipt & Document;
 
 
 @Schema({ timestamps: true })
-class Car {
+class Receipt {
+    // ------------------------------------- receipt data -------------------------------------
+
+    @Prop({ type: Number, required: true, default: generatedId('number', 18, false), unique: true })
+    receiptNumber: number;
 
     // ------------------------------------- car data -------------------------------------
-    @Prop({ type: String, required: true, })
-    licensePlate: string;
+
+    @Prop({ type: Types.ObjectId, ref: 'Car', required: true })
+    car: Car;
 
     @Prop({ type: Types.ObjectId, ref: 'ParkingPlace', required: true })
     parkingPlace: ParkingPlace;
 
-    // ------------------------------------- car status -------------------------------------
+    // ------------------------------------- receipt status -------------------------------------
 
-    @Prop({ type: Number, required: true, default: 3 })
+    @Prop({ type: Number, required: true, default: 5 })
     statusCode: number;
 
     @Prop({ type: String, required: false })
@@ -33,7 +39,16 @@ class Car {
     // ------------------------------------- cost -------------------------------------
 
     @Prop({ type: Types.ObjectId, required: true })
-    receipt: Receipt;
+    fees: Fees;
+
+    @Prop({ type: String, required: false })
+    discountCode: string;
+
+    @Prop({ type: String, required: true })
+    tax: string;
+
+    @Prop({ type: Number, required: true })
+    totalFees: number;
 
     // ------------------------------------- time -------------------------------------
 
@@ -46,10 +61,10 @@ class Car {
 
 
 
-const CarSchema = SchemaFactory.createForClass(Car);
+const ReceiptSchema = SchemaFactory.createForClass(Receipt);
 
 
-CarSchema.pre('save', function (next) {
+ReceiptSchema.pre('save', function (next) {
     const egyptTime = formatDate(new Date);
     this.createdAt = egyptTime;
     this.updatedAt = egyptTime;
@@ -57,18 +72,18 @@ CarSchema.pre('save', function (next) {
     next();
 });
 
-CarSchema.pre('findOneAndUpdate', function (next) {
+ReceiptSchema.pre('findOneAndUpdate', function (next) {
     const egyptTime = formatDate(new Date);
     this.set({ updatedAt: egyptTime });
-    const update = this.getUpdate() as Car;
+    const update = this.getUpdate() as Receipt;
     if (update.statusCode !== undefined && Status[update.statusCode]) this.set({ status: Status[update.statusCode] });
     next();
 });
 
-CarSchema.pre('updateOne', function (next) {
+ReceiptSchema.pre('updateOne', function (next) {
     const egyptTime = formatDate(new Date);
     this.set({ updatedAt: egyptTime });
-    const update = this.getUpdate() as Car;
+    const update = this.getUpdate() as Receipt;
     if (update.statusCode !== undefined && Status[update.statusCode]) this.set({ status: Status[update.statusCode] });
     next();
 });
@@ -76,7 +91,7 @@ CarSchema.pre('updateOne', function (next) {
 
 
 export {
-    CarSchema,
-    Car,
-    CarDocument
+    ReceiptSchema,
+    Receipt,
+    ReceiptDocument
 };

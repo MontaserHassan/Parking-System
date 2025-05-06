@@ -2,10 +2,10 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
-import FeesService from './fees.service';
 import FeesController from './fees.controller';
-import Util from 'src/Utils/util.util';
+import FeesService from './fees.service';
 import { Fees, FeesSchema } from './entities/fee.entity';
+import Util from 'src/Utils/util.util';
 
 
 
@@ -15,5 +15,6 @@ import { Fees, FeesSchema } from './entities/fee.entity';
   ],
   controllers: [FeesController],
   providers: [FeesService, Util],
+  exports: [FeesService],
 })
 export default class FeesModule { };

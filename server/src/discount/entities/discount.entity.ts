@@ -1,39 +1,41 @@
 /* eslint-disable prettier/prettier */
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Types } from 'mongoose';
+import { Document, } from 'mongoose';
 
-import { ParkingPlace } from 'src/parking-place/entities/parking-place.entity';
-import { Receipt } from 'src/receipt/entities/receipt.entity';
-import { formatDate } from '../../helpers/helper-functions.helper';
+import { formatDate, generatedId } from '../../helpers/helper-functions.helper';
 import Status from 'src/Interfaces/status.interface';
 
 
 
-type CarDocument = Car & Document;
+type DiscountDocument = Discount & Document;
 
 
 @Schema({ timestamps: true })
-class Car {
+class Discount {
+    // ------------------------------------- Discount data -------------------------------------
 
-    // ------------------------------------- car data -------------------------------------
-    @Prop({ type: String, required: true, })
-    licensePlate: string;
+    @Prop({ type: String, required: true, default: generatedId('string', 8, true), unique: true })
+    discountCode: string;
 
-    @Prop({ type: Types.ObjectId, ref: 'ParkingPlace', required: true })
-    parkingPlace: ParkingPlace;
+    @Prop({ type: String, required: true })
+    discountPercentage: string
 
-    // ------------------------------------- car status -------------------------------------
+    @Prop({ type: String, required: true })
+    discountDescription: string;
 
-    @Prop({ type: Number, required: true, default: 3 })
+    @Prop({ type: String, required: true })
+    expiryDate: string;
+
+    @Prop({ type: Boolean, required: true, default: true })
+    isValid: boolean;
+
+    // ------------------------------------- Discount status -------------------------------------
+
+    @Prop({ type: Number, required: true, default: 7 })
     statusCode: number;
 
     @Prop({ type: String, required: false })
     status: string;
-
-    // ------------------------------------- cost -------------------------------------
-
-    @Prop({ type: Types.ObjectId, required: true })
-    receipt: Receipt;
 
     // ------------------------------------- time -------------------------------------
 
@@ -46,10 +48,10 @@ class Car {
 
 
 
-const CarSchema = SchemaFactory.createForClass(Car);
+const DiscountSchema = SchemaFactory.createForClass(Discount);
 
 
-CarSchema.pre('save', function (next) {
+DiscountSchema.pre('save', function (next) {
     const egyptTime = formatDate(new Date);
     this.createdAt = egyptTime;
     this.updatedAt = egyptTime;
@@ -57,18 +59,18 @@ CarSchema.pre('save', function (next) {
     next();
 });
 
-CarSchema.pre('findOneAndUpdate', function (next) {
+DiscountSchema.pre('findOneAndUpdate', function (next) {
     const egyptTime = formatDate(new Date);
     this.set({ updatedAt: egyptTime });
-    const update = this.getUpdate() as Car;
+    const update = this.getUpdate() as Discount;
     if (update.statusCode !== undefined && Status[update.statusCode]) this.set({ status: Status[update.statusCode] });
     next();
 });
 
-CarSchema.pre('updateOne', function (next) {
+DiscountSchema.pre('updateOne', function (next) {
     const egyptTime = formatDate(new Date);
     this.set({ updatedAt: egyptTime });
-    const update = this.getUpdate() as Car;
+    const update = this.getUpdate() as Discount;
     if (update.statusCode !== undefined && Status[update.statusCode]) this.set({ status: Status[update.statusCode] });
     next();
 });
@@ -76,7 +78,7 @@ CarSchema.pre('updateOne', function (next) {
 
 
 export {
-    CarSchema,
-    Car,
-    CarDocument
+    DiscountSchema,
+    Discount,
+    DiscountDocument
 };

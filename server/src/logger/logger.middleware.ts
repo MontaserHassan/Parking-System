@@ -1,14 +1,14 @@
 /* eslint-disable prettier/prettier */
 import { Injectable, NestMiddleware } from '@nestjs/common';
+import { Request, Response, NextFunction } from 'express';
 
-import { Request, Response } from 'express';
 import logger from 'src/Configs/logger.config';
 
 
 
 @Injectable()
 export default class LoggerMiddleware implements NestMiddleware {
-  use(req: Request, res: Response, next: () => void) {
+  use(req: Request, res: Response, next: NextFunction) {
     const { method, originalUrl } = req;
     const startTime = Date.now();
     const requestNumberTrace = String(Math.floor(Math.random() * 100000000));

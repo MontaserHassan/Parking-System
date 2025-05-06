@@ -13,17 +13,17 @@ export default class UpdateCarDto {
     @IsString({ message: 'License Plate must be a string' })
     @IsOptional({})
     @Transform(({ value }) => value?.toLowerCase().trim())
-    licensePlate: string;
+    licensePlate?: string;
 
     @IsString({ message: 'Status Code must be a string' })
     @IsOptional({})
-    statusCode: number;
+    statusCode?: number;
 
     @IsString({ message: 'Status must be a string' })
     @IsOptional({})
-    status: string;
+    status?: string;
 
     @IsMongoId({ message: 'Parking Place Id must be a string' })
     @IsOptional({})
-    parkingPlace: string;
+    parkingPlace?: string;
 };

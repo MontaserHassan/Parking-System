@@ -5,7 +5,7 @@ import { Logger, ValidationPipe } from '@nestjs/common';
 import * as bodyParser from 'body-parser';
 import * as timeOut from 'connect-timeout';
 
-import { AppModule } from './app.module';
+import AppModule from './app.module';
 import ValidationExceptionFilter from './Exceptions/error.exception';
 import LoggerMiddleware from './logger/logger.middleware';
 

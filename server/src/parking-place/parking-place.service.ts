@@ -17,8 +17,12 @@ export default class ParkingPlaceService {
   constructor(@InjectModel(ParkingPlace.name) private parkingPlaceModel: Model<ParkingPlaceDocument>) { };
 
   async create(createParkingPlaceDto: CreateParkingPlaceDto[]) {
-    const newParkingPlace = await this.parkingPlaceModel.insertMany(createParkingPlaceDto);
-    return newParkingPlace;
+    const createPromises = createParkingPlaceDto.map(dto => {
+      const place = new this.parkingPlaceModel(dto);
+      return place.save();
+    });
+    const savedPlaces = await Promise.all(createPromises);
+    return savedPlaces;
   };
 
   async totalParkingPlaces(filterParkingPlaceDataDto: FilterParkingPlaceDataDto): Promise<number> {
@@ -59,6 +63,11 @@ export default class ParkingPlaceService {
 
   async update(updateParkingPlaceDto: UpdateParkingPlaceDto) {
     const updatedParkingPlace = await this.parkingPlaceModel.findByIdAndUpdate(updateParkingPlaceDto.placeNumberId, updateParkingPlaceDto, { new: true }).select('-__v');
+    return updatedParkingPlace;
+  };
+
+  async updateActivePlace(updateParkingPlaceDto: UpdateParkingPlaceDto) {
+    const updatedParkingPlace = await this.parkingPlaceModel.findOneAndUpdate({ _id: updateParkingPlaceDto.placeNumberId, statusCode: 1 }, updateParkingPlaceDto, { new: true }).select('-__v');
     return updatedParkingPlace;
   };
 

@@ -1,11 +1,11 @@
 /* eslint-disable prettier/prettier */
-import { IsNotEmpty, IsNumber, IsOptional, IsString, Validate } from "class-validator";
+import { IsMongoId, IsNotEmpty, IsNumber, IsOptional, IsString, Validate } from "class-validator";
 import IsGreaterThanZeroConstraint from "src/validation/is-greaterThan-zero.validation";
 
 
 
 export default class UpdateParkingPlaceDto {
-    @IsString({ message: "Place Number Id must be a string" })
+    @IsMongoId({ message: "Place Number Id must be a string" })
     @IsNotEmpty({ message: "Place Number Id is required" })
     placeNumberId: string;
 

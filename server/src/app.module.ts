@@ -11,6 +11,8 @@ import AppService from './app.service';
 import CarsModule from './cars/cars.module';
 import ParkingPlaceModule from './parking-place/parking-place.module';
 import FeesModule from './fees/fees.module';
+import ReceiptModule from './receipt/receipt.module';
+import DiscountModule from './discount/discount.module';
 
 
 
@@ -24,11 +26,10 @@ import FeesModule from './fees/fees.module';
     CarsModule,
     ParkingPlaceModule,
     FeesModule,
+    ReceiptModule,
+    DiscountModule,
   ],
   controllers: [AppController,],
   providers: [AppService,],
 })
-
-
-
-export class AppModule { };
+export default class AppModule { };
