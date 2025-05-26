@@ -4,22 +4,53 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
 import { Receipt, ReceiptDocument } from './entities/receipt.entity';
-import { CreateReceiptDto } from './dto/create-receipt.dto';
-import { UpdateReceiptDto } from './dto/update-receipt.dto';
+import CreateReceiptDto from './dto/create-receipt.dto';
+import UpdateReceiptDto from './dto/update-receipt.dto';
+import FilterReceiptDataDto from './dto/filter-receipt-data.dto copy';
 
 
 
 @Injectable()
 export default class ReceiptService {
 
-  constructor(@InjectModel(Receipt.name) private receiptModel: Model<ReceiptDocument>) { };
+  constructor(
+    @InjectModel(Receipt.name) private receiptModel: Model<ReceiptDocument>,
+  ) { };
 
-  async create() { };
+  async create(createReceiptDto: CreateReceiptDto) {
+    console.log('createReceiptDto: ', createReceiptDto);
+    const newReceipt = await this.receiptModel.create(createReceiptDto);
+    return newReceipt;
+  };
 
-  async findAll() { };
+  async findAll(filterReceiptDataDto: FilterReceiptDataDto) {
+    const receipts = await this.receiptModel.find(filterReceiptDataDto).select('-__v');
+    return receipts;
+  };
 
-  async findOne() { };
+  async totalReceipts(filterReceiptDataDto: FilterReceiptDataDto) {
+    const totalReceipts = await this.receiptModel.countDocuments(filterReceiptDataDto);
+    return totalReceipts;
+  };
 
-  async update() { };
+  async findWithPagination(filterReceiptDataDto: FilterReceiptDataDto, limit: number, skip: number) {
+    const totalReceipts = await this.receiptModel.find(filterReceiptDataDto).limit(limit).skip(skip).select('-__v');
+    return totalReceipts;
+  };
+
+  async findById(receiptId: string) {
+    const receipt = await this.receiptModel.findById(receiptId).select('-__v');
+    return receipt;
+  };
+
+  async findOne(filterReceiptDataDto: FilterReceiptDataDto) {
+    const receipt = await this.receiptModel.findOne(filterReceiptDataDto).select('-__v');
+    return receipt;
+  };
+
+  async update(updateReceiptDto: UpdateReceiptDto) {
+    const updatedReceipt = await this.receiptModel.findOneAndUpdate({ receiptNumber: updateReceiptDto.receiptNumber }, updateReceiptDto, { new: true });
+    return updatedReceipt;
+  };
 
 };

@@ -32,7 +32,7 @@ class Car {
 
     // ------------------------------------- cost -------------------------------------
 
-    @Prop({ type: Types.ObjectId, required: true })
+    @Prop({ type: Types.ObjectId, required: false, ref: 'Receipt' })
     receipt: Receipt;
 
     // ------------------------------------- time -------------------------------------

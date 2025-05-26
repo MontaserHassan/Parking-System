@@ -7,35 +7,26 @@ import Status from 'src/Interfaces/status.interface';
 
 
 
-type DiscountDocument = Discount & Document;
+type TaxDocument = Tax & Document;
 
 
 @Schema({ timestamps: true })
-class Discount {
-    // ------------------------------------- Discount data -------------------------------------
+class Tax {
+    // ------------------------------------- Tax data -------------------------------------
 
     @Prop({ type: String, required: true, default: () => generatedId('string', 6, true), unique: true })
-    discountCode: string;
+    taxCode: string;
 
     @Prop({ type: Number, required: true })
-    discountPercentage: number;
+    taxPercentage: number;
 
     @Prop({ type: String, required: true, default: '%' })
-    discountType: string;
+    taxType: string;
 
     @Prop({ type: String, required: true })
-    discountDescription: string;
+    taxDescription: string;
 
-    @Prop({ type: String, required: true })
-    discountExpiryDate: string;
-
-    @Prop({ type: Date, required: true })
-    formattedExpiryDate: Date;
-
-    @Prop({ type: Boolean, required: true, default: true })
-    isValid: boolean;
-
-    // ------------------------------------- Discount status -------------------------------------
+    // ------------------------------------- Tax status -------------------------------------
 
     @Prop({ type: Number, required: true, default: 7 })
     statusCode: number;
@@ -54,10 +45,10 @@ class Discount {
 
 
 
-const DiscountSchema = SchemaFactory.createForClass(Discount);
+const TaxSchema = SchemaFactory.createForClass(Tax);
 
 
-DiscountSchema.pre('save', function (next) {
+TaxSchema.pre('save', function (next) {
     const egyptTime = formatDate(new Date);
     this.createdAt = egyptTime;
     this.updatedAt = egyptTime;
@@ -65,18 +56,18 @@ DiscountSchema.pre('save', function (next) {
     next();
 });
 
-DiscountSchema.pre('findOneAndUpdate', function (next) {
+TaxSchema.pre('findOneAndUpdate', function (next) {
     const egyptTime = formatDate(new Date);
     this.set({ updatedAt: egyptTime });
-    const update = this.getUpdate() as Discount;
+    const update = this.getUpdate() as Tax;
     if (update.statusCode !== undefined && Status[update.statusCode]) this.set({ status: Status[update.statusCode] });
     next();
 });
 
-DiscountSchema.pre('updateOne', function (next) {
+TaxSchema.pre('updateOne', function (next) {
     const egyptTime = formatDate(new Date);
     this.set({ updatedAt: egyptTime });
-    const update = this.getUpdate() as Discount;
+    const update = this.getUpdate() as Tax;
     if (update.statusCode !== undefined && Status[update.statusCode]) this.set({ status: Status[update.statusCode] });
     next();
 });
@@ -84,7 +75,7 @@ DiscountSchema.pre('updateOne', function (next) {
 
 
 export {
-    DiscountSchema,
-    Discount,
-    DiscountDocument
+    TaxSchema,
+    Tax,
+    TaxDocument
 };

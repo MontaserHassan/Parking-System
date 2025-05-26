@@ -11,6 +11,8 @@ enum ErrorCarMessage {
     PARKING_PLACE_NOT_FOUND = 'This place not found inside our parking',
     PARKING_PLACE_NOT_UPDATED = 'Parking place not updated due to Not found or Occupied',
     CAR_NOT_FOUND = 'Car not found inside our parking',
+    DISCOUNT_NOT_FOUND = 'This discount is wrong',
+    FEES_NOT_FOUND = 'This fees is wrong',
 };
 
 

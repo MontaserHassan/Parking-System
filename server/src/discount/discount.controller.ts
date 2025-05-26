@@ -20,7 +20,7 @@ export default class DiscountController {
   async create(@Request() req, @Response() res, @Body() createDiscountDto: CreateDiscountDto) {
     try {
       const newDiscount = await this.discountService.create(createDiscountDto);
-      if (!newDiscount) throw new CustomExceptionFilter(ErrorDiscountMessage.NOT_CREATED, HttpStatus.BAD_REQUEST, []);
+      if (!newDiscount) throw new CustomExceptionFilter(ErrorDiscountMessage.NOT_CREATED, HttpStatus.BAD_REQUEST, ['discount']);
       return SuccessResponse.send(req, res, {
         responseCode: HttpStatus.CREATED,
         responseMessage: SuccessDiscountMessage.CREATED,
@@ -62,7 +62,7 @@ export default class DiscountController {
   async findOne(@Request() req, @Response() res, @Param('discountId') discountId: string) {
     try {
       const car = await this.discountService.findById(discountId);
-      if (!car) throw new CustomExceptionFilter(ErrorDiscountMessage.NOT_FOUND, 404, ['car']);
+      if (!car) throw new CustomExceptionFilter(ErrorDiscountMessage.NOT_FOUND, 404, ['discount']);
       return SuccessResponse.send(req, res, {
         responseCode: HttpStatus.OK,
         responseMessage: SuccessDiscountMessage.GET_ONE,
@@ -76,13 +76,29 @@ export default class DiscountController {
   };
 
   @Patch('/')
-  update(@Body() updateDiscountDto: UpdateDiscountDto) { };
+  async update(@Request() req, @Response() res, @Body() updateDiscountDto: UpdateDiscountDto) {
+    try {
+      const isDiscountExisting = await this.discountService.findById(updateDiscountDto.discountId);
+      if (!isDiscountExisting) throw new CustomExceptionFilter(ErrorDiscountMessage.NOT_FOUND, HttpStatus.NOT_FOUND, ['discount']);
+      const updateReceipt = await this.discountService.update(updateDiscountDto);
+      if (!updateReceipt) throw new CustomExceptionFilter(ErrorDiscountMessage.NOT_UPDATED, HttpStatus.BAD_REQUEST, ['discount']);
+      return SuccessResponse.send(req, res, {
+        responseCode: HttpStatus.OK,
+        responseMessage: SuccessDiscountMessage.GET_ONE,
+        data: {
+          discount: updateReceipt,
+        },
+      });
+    } catch (err) {
+      throw err;
+    };
+  };
 
   @Delete('/:discountId')
   async remove(@Request() req, @Response() res, @Param('discountId') discountId: string) {
     try {
       const deleteDiscount = await this.discountService.remove(discountId);
-      if (!deleteDiscount) throw new CustomExceptionFilter(ErrorDiscountMessage.NOT_DELETED, HttpStatus.NOT_FOUND, []);
+      if (!deleteDiscount) throw new CustomExceptionFilter(ErrorDiscountMessage.NOT_DELETED, HttpStatus.NOT_FOUND, ['discount']);
       return SuccessResponse.send(req, res, {
         responseCode: HttpStatus.OK,
         responseMessage: SuccessDiscountMessage.DELETED,

@@ -3,7 +3,11 @@ import { Controller, Get, Post, Body, Patch, Param, Response, Request, HttpStatu
 
 import CarsService from './cars.service';
 import ParkingPlaceService from 'src/parking-place/parking-place.service';
+import ReceiptService from 'src/receipt/receipt.service';
+import DiscountService from 'src/discount/discount.service';
+import FeesService from 'src/fees/fees.service';
 import Util from 'src/Utils/util.util';
+import PaymentUtil from 'src/Utils/payment.util';
 import SuccessResponse from 'src/helpers/success-response.helper';
 import CustomExceptionFilter from 'src/Error/error-exception.error';
 import { ErrorCarMessage, SuccessCarMessage } from './Messages/index.message';
@@ -18,30 +22,47 @@ export default class CarsController {
   constructor(
     private readonly carsService: CarsService,
     private readonly parkingPlace: ParkingPlaceService,
+    private readonly receiptService: ReceiptService,
+    private readonly discountService: DiscountService,
+    private readonly FeesService: FeesService,
     private readonly util: Util,
+    private readonly paymentUtil: PaymentUtil
   ) { };
 
   @Post('/')
   async create(@Request() req, @Response() res, @Body() createCarDto: CreateCarDto) {
     try {
-      const [car, isParkingPlaceExisting] = await Promise.all([
+      const [car, isParkingPlaceExisting, feesData] = await Promise.all([
         this.carsService.findOne({ licensePlate: createCarDto.licensePlate, statusCode: 3 }),
         this.parkingPlace.findById(createCarDto.parkingPlace),
+        this.FeesService.findById(createCarDto.fees),
       ]);
       if (car) throw new CustomExceptionFilter(ErrorCarMessage.ALREADY_EXISTS, HttpStatus.NOT_FOUND, ['car']);
+      if (!feesData) throw new CustomExceptionFilter(ErrorCarMessage.FEES_NOT_FOUND, HttpStatus.NOT_FOUND, ['fees']);
       if (!isParkingPlaceExisting) throw new CustomExceptionFilter(ErrorCarMessage.PARKING_PLACE_NOT_FOUND, HttpStatus.NOT_FOUND, ['parkingPlace']);
       if (isParkingPlaceExisting.statusCode === 2) throw new CustomExceptionFilter(ErrorCarMessage.PARKING_PLACE_IS_OCCUPIED, HttpStatus.BAD_REQUEST, ['parkingPlace']);
+      let isDiscountExisting;
+      if (createCarDto.discount) {
+        isDiscountExisting = await this.discountService.findOne({ discountCode: createCarDto.discount });
+        if (!isDiscountExisting) throw new CustomExceptionFilter(ErrorCarMessage.DISCOUNT_NOT_FOUND, HttpStatus.NOT_FOUND, ['discount']);
+      };
       const newCar = await this.carsService.create(createCarDto);
       if (!newCar) throw new CustomExceptionFilter(ErrorCarMessage.NOT_CREATED, HttpStatus.BAD_REQUEST, ['car']);
-      await this.parkingPlace.update({ placeNumberId: isParkingPlaceExisting._id.toString(), statusCode: 2 });
+      // await this.parkingPlace.update({ placeNumberId: isParkingPlaceExisting._id.toString(), statusCode: 2 });
+      const tax = 1 // feesData.tax.taxPercentage;
+      const totalFees = this.paymentUtil.calculateFees(feesData.price, tax, isDiscountExisting.discountPercentage);
+      console.log(totalFees);
+      const newReceipt = await this.receiptService.create({ car: newCar._id.toString(), parkingPlace: isParkingPlaceExisting._id.toString(), fees: feesData._id?.toString(), discount: isDiscountExisting?._id?.toString(), tax: feesData.tax?.toString(), totalFees: 100 });
       return SuccessResponse.send(req, res, {
         responseCode: HttpStatus.CREATED,
         responseMessage: SuccessCarMessage.CREATED,
         data: {
           newCar: newCar,
+          newReceipt: newReceipt,
         },
       });
     } catch (err) {
+      console.log('err: ', err);
       throw err;
     };
   };

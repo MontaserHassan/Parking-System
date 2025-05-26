@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { Transform } from "class-transformer";
-import { IsBoolean, IsMongoId, IsNotEmpty, IsOptional, IsString, } from "class-validator";
+import { IsBoolean, IsDate, IsEnum, IsMongoId, IsNotEmpty, IsNumber, IsOptional, IsString, } from "class-validator";
 
 
 
@@ -10,7 +10,7 @@ export default class UpdateDiscountDto {
     @Transform(({ value }) => value.trim())
     discountId: string;
 
-    @IsString({ message: 'Discount Percentage must be a string' })
+    @IsNumber({}, { message: 'Discount Percentage must be a number' })
     @IsOptional({})
     discountPercentage: string;
 
@@ -18,9 +18,29 @@ export default class UpdateDiscountDto {
     @IsOptional({})
     discountDescription: string;
 
-    @IsString({ message: 'Expiry Date must be a string' })
+    @IsString({ message: "Expiry Date must be a string" })
     @IsOptional({})
+    discountExpiryDate: string;
+
+    @IsDate({ message: "Formatted Expiry Date must be a date" })
+    @IsOptional({})
+    formattedExpiryDate: Date;
+
+    @IsString({ message: "Expiry Date must be a string in the format DD/MM/YYYY" })
+    @IsOptional({})
+    @Transform(({ value }) => value.trim())
     expiryDate: string;
+
+    @IsString({ message: "Expiry Time must be a string in the format HH:mm" })
+    @IsOptional({})
+    @Transform(({ value }) => value.trim())
+    expiryTime: string;
+
+    @IsString({ message: "Day Shift must be a string" })
+    @IsOptional({})
+    @Transform(({ value }) => value.trim())
+    @IsEnum(["AM", "PM"], { message: "Day Shift must be 'AM' or 'PM'" })
+    dayShift: string;
 
     @IsString({ message: 'Status Code must be a string' })
     @IsOptional({})

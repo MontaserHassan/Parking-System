@@ -19,30 +19,44 @@ const remainingTime = (date: Date) => {
 
 const generatedId = (type: 'string' | 'number', length: number, alphabetical: boolean): string | number => {
     const numbers = '0123456789';
-    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
     const characters = alphabetical ? letters + numbers : numbers;
     let id = '';
-    for (let i = 0; i < length; i++) {
-        id += characters.charAt(Math.floor(Math.random() * characters.length));
+    if (alphabetical) {
+        // Ensure at least one letter and one number
+        const oneLetter = letters.charAt(Math.floor(Math.random() * letters.length));
+        const oneNumber = numbers.charAt(Math.floor(Math.random() * numbers.length));
+        // Fill the remaining characters
+        const remainingLength = length - 2;
+        for (let i = 0; i < remainingLength; i++) {
+            id += characters.charAt(Math.floor(Math.random() * characters.length));
+        };
+        // Combine and shuffle to prevent predictable prefix
+        id = (oneLetter + oneNumber + id).split('').sort(() => Math.random() - 0.5).join('');
+    } else {
+        // Only numbers
+        for (let i = 0; i < length; i++) {
+            id += numbers.charAt(Math.floor(Math.random() * numbers.length));
+        };
     };
     if (type === 'number') {
         const numericId = id.replace(/\D/g, '');
-        return Number(numericId.slice(0, length)) || Date.now();
+        return Number(numericId.slice(0, length)) || Date.now(); // fallback if all chars are filtered out
     };
     return id;
 };
 
 
-const calculateExpiryDate = (date: string, time: string, dayShift: string): { date: string, expiryDurationPerSecond: number, expiryDurationPerHour: number } => {
+const calculateExpiryDate = (date: string, time: string, dayShift: string): { date: string, expiryDate: Date, expiryDurationPerSecond: number, expiryDurationPerHour: number } => {
     const [day, month, year] = date.split('/').map(Number);
     let [hours, minutes] = time.split(':').map(Number);
     if (dayShift.toUpperCase() === 'PM' && hours < 12) hours += 12;
     if (dayShift.toUpperCase() === 'AM' && hours === 12) hours = 0;
     const finalDate = new Date(year, month - 1, day, hours, minutes);
-    const formattedDate = formatDate(finalDate)
+    const formattedDate = formatDate(finalDate);
     const expiryDurationPerSecond = Math.floor((finalDate.getTime() - Date.now()) / 1000);
     const expiryDurationPerHour = Math.floor(expiryDurationPerSecond / 3600);
-    return { date: formattedDate, expiryDurationPerSecond, expiryDurationPerHour };
+    return { date: formattedDate, expiryDate: finalDate, expiryDurationPerSecond, expiryDurationPerHour };
 };
 
 

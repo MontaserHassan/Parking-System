@@ -6,8 +6,8 @@ const Status = {
     4: 'left', // car
     5: 'pending', // receipt
     6: 'paid', // receipt
-    7: 'active', // discount
-    8: 'not active', // discount
+    7: 'active', // discount - tax
+    8: 'not active', // discount - tax
 };
 
 

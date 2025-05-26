@@ -17,7 +17,9 @@ export default class DiscountService {
   constructor(@InjectModel(Discount.name) private discountModel: Model<DiscountDocument>) { };
 
   async create(createDiscountDto: CreateDiscountDto) {
-    createDiscountDto.discountExpiry = calculateExpiryDate(createDiscountDto.expiryDate, createDiscountDto.expiryTime, createDiscountDto.dayShift).date;
+    const { date, expiryDate, } = calculateExpiryDate(createDiscountDto.expiryDate, createDiscountDto.expiryTime, createDiscountDto.dayShift);
+    createDiscountDto.discountExpiryDate = date;
+    createDiscountDto.formattedExpiryDate = expiryDate;
     const newDiscount = await this.discountModel.create(createDiscountDto);
     return newDiscount;
   };
@@ -28,8 +30,8 @@ export default class DiscountService {
   };
 
   async findWithPagination(filterDiscountDataDto: FilterDiscountDataDto, limit: number, skip: number): Promise<Discount[]> {
-    const totalCars = await this.discountModel.find(filterDiscountDataDto).sort({ updatedAt: 1 }).limit(limit).skip(skip).select('-__v');
-    return totalCars;
+    const totalDiscounts = await this.discountModel.find(filterDiscountDataDto).sort({ updatedAt: 1 }).limit(limit).skip(skip).select('-__v');
+    return totalDiscounts;
   };
 
   async findAll() {
@@ -48,6 +50,11 @@ export default class DiscountService {
   };
 
   async update(updateDiscountDto: UpdateDiscountDto) {
+    if (updateDiscountDto.expiryDate && updateDiscountDto.expiryTime && updateDiscountDto.dayShift) {
+      const { date, expiryDate: formattedDate } = calculateExpiryDate(updateDiscountDto.expiryDate, updateDiscountDto.expiryTime, updateDiscountDto.dayShift);
+      updateDiscountDto.discountExpiryDate = date;
+      updateDiscountDto.formattedExpiryDate = formattedDate;
+    };
     const updatedDiscount = await this.discountModel.findByIdAndUpdate(updateDiscountDto.discountId, updateDiscountDto, { new: true });
     return updatedDiscount;
   };

@@ -37,9 +37,7 @@ export default class PaymentUtil {
         };
     };
 
-
     // ----------------------------- retrieve checkout session -----------------------------
-
 
     async retrieveCheckoutSession(sessionId: string): Promise<{ session: string; transactionId: string } | false> {
         try {
@@ -50,5 +48,9 @@ export default class PaymentUtil {
             return false;
         };
     };
+
+    // ----------------------------- calculate fees -----------------------------
+
+    calculateFees(fees: number, tax: number, discount: number) { };
 
 };

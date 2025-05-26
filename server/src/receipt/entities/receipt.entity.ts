@@ -5,6 +5,8 @@ import { Document, Types } from 'mongoose';
 import { ParkingPlace } from 'src/parking-place/entities/parking-place.entity';
 import { Car } from 'src/cars/entities/car.entity';
 import { Fees } from 'src/fees/entities/fee.entity';
+import { Tax } from 'src/tax/entities/tax.entity';
+import { Discount } from 'src/discount/entities/discount.entity';
 import { formatDate, generatedId } from '../../helpers/helper-functions.helper';
 import Status from 'src/Interfaces/status.interface';
 
@@ -38,14 +40,14 @@ class Receipt {
 
     // ------------------------------------- cost -------------------------------------
 
-    @Prop({ type: Types.ObjectId, required: true })
+    @Prop({ type: Types.ObjectId, required: true, ref: 'Fees' })
     fees: Fees;
 
-    @Prop({ type: String, required: false })
-    discountCode: string;
+    @Prop({ type: Types.ObjectId, required: false, ref: 'Discount' })
+    discount: Discount;
 
-    @Prop({ type: String, required: true })
-    tax: string;
+    @Prop({ type: Types.ObjectId, required: true, ref: 'Tax' })
+    tax: Tax;
 
     @Prop({ type: Number, required: true })
     totalFees: number;
