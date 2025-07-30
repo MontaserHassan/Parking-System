@@ -4,19 +4,23 @@ import { ConfigService } from '@nestjs/config';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import * as bodyParser from 'body-parser';
 import * as timeOut from 'connect-timeout';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 
 import AppModule from './app.module';
-import ValidationExceptionFilter from './Exceptions/error.exception';
-import LoggerMiddleware from './logger/logger.middleware';
+import ValidationExceptionFilter from 'src/core/Exceptions/error.exception';
+import LoggerMiddleware from 'src/core/logger/logger.middleware';
+import { rabbitMQQueues } from './modules/rabbit-mqmodule/queue.rabbit-mqmodule';
 
 
 
 async function bootstrap() {
+
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
   const isProd = configService.get<string>('PROD') === '1';
   const port = configService.get<number>('PORT');
   const dbUri = configService.get<string>('DB_URI');
+  const rabbitMqUri = configService.get<string>('RABBITMQ_URI');
 
   app.setGlobalPrefix('api');
   app.use(timeOut('30s'));
@@ -28,11 +32,24 @@ async function bootstrap() {
 
   if (isProd) app.use(new LoggerMiddleware().use);
 
+  for (const queue of rabbitMQQueues) {
+    app.connectMicroservice<MicroserviceOptions>({
+      transport: Transport.RMQ,
+      options: {
+        urls: [rabbitMqUri],
+        queue: queue.name,
+        queueOptions: queue.options,
+      },
+    });
+  };
+  await app.startAllMicroservices();
+
   const server = await app.listen(port);
   const address = server.address();
 
   Logger.log(`Application is running on: http://localhost:${address.port}/api`, 'Bootstrap',);
   Logger.log(`Connected to the database: ${dbUri}`, 'Bootstrap');
+  Logger.log(`connected to rabbitmq server: ${process.env.RABBITMQ_URI}`, 'Bootstrap');
 
 };
 

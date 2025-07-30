@@ -1,0 +1,4 @@
+1- discount(finished)
+2- tax (finished)
+2- dev-feature (new feature)
+3- receipt (will complete)

@@ -1,0 +1,1295 @@
+{
+	"info": {
+		"_postman_id": "ccf8bc4c-1dad-45bd-8b75-b4314cff7f5f",
+		"name": "Parking System",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28090962",
+		"_collection_link": "https://montaser99.postman.co/workspace/Team-Workspace~faacda42-8504-486e-872b-5f649314f2c6/collection/28090962-ccf8bc4c-1dad-45bd-8b75-b4314cff7f5f?action=share&source=collection_link&creator=28090962"
+	},
+	"item": [
+		{
+			"name": "Fees",
+			"item": [
+				{
+					"name": "get all fees",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:7777/api/fees?lang=ar&page=2&limit=2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"fees"
+							],
+							"query": [
+								{
+									"key": "lang",
+									"value": "ar"
+								},
+								{
+									"key": "page",
+									"value": "2"
+								},
+								{
+									"key": "limit",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "get all fees",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:7777/api/fees?page=2&limit=2",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "7777",
+									"path": [
+										"api",
+										"fees"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "2"
+										},
+										{
+											"key": "limit",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "571"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"23b-qjH/kW4nGsWyRYFI6dp39J5HU8E\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 28 Apr 2025 12:00:15 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"responseCode\": 200,\n    \"responseMessage\": \"Fees fetched successfully\",\n    \"data\": {\n        \"currentPage\": 2,\n        \"skip\": 2,\n        \"limit\": 2,\n        \"totalPages\": 3,\n        \"totalFeesForCurrentPage\": 2,\n        \"totalFees\": 5,\n        \"fees\": [\n            {\n                \"_id\": \"680f6b1a9b68fb02c2efb9ac\",\n                \"reservationType\": \"3\",\n                \"reservationTypeName\": \"Quarter-Yearly\",\n                \"price\": 125,\n                \"currency\": \"USD\",\n                \"createdAt\": \"28/04/2025 02:48:42 pm\",\n                \"updatedAt\": \"28/04/2025 02:48:42 pm\"\n            },\n            {\n                \"_id\": \"680f6b4f9b68fb02c2efb9af\",\n                \"reservationType\": \"4\",\n                \"reservationTypeName\": \"Half-Yearly\",\n                \"price\": 250,\n                \"currency\": \"USD\",\n                \"createdAt\": \"28/04/2025 02:49:35 pm\",\n                \"updatedAt\": \"28/04/2025 02:49:35 pm\"\n            }\n        ]\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "create fee",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"reservationType\": \"5\",\n    \"reservationTypeName\": \"Yearly\",\n    \"price\": 500,\n    \"currency\": \"USD\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7777/api/fees",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"fees"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "create fee",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"reservationType\": \"5\",\n    \"reservationTypeName\": \"Yearly\",\n    \"price\": 500,\n    \"currency\": \"USD\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:7777/api/fees",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "7777",
+									"path": [
+										"api",
+										"fees"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "279"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"117-SmXwvYjomx5ydxaAmq8IgzOfFPU\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 28 Apr 2025 11:49:48 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"responseCode\": 200,\n    \"responseMessage\": \"Fee created successfully\",\n    \"data\": {\n        \"fee\": {\n            \"reservationType\": \"5\",\n            \"reservationTypeName\": \"Yearly\",\n            \"price\": 500,\n            \"currency\": \"USD\",\n            \"createdAt\": \"28/04/2025 02:49:48 pm\",\n            \"updatedAt\": \"28/04/2025 02:49:48 pm\",\n            \"_id\": \"680f6b5c9b68fb02c2efb9b2\",\n            \"__v\": 0\n        }\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "get fee by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:7777/api/fees/680f6313f8104539fa850a68",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"fees",
+								"680f6313f8104539fa850a68"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "get fee by id",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:7777/api/fees/680f6313f8104539fa850a68",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "7777",
+									"path": [
+										"api",
+										"fees",
+										"680f6313f8104539fa850a68"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "276"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"114-gbwiEaxfLG+XHk9P0elU2nLdd7g\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 28 Apr 2025 12:05:44 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"responseCode\": 200,\n    \"responseMessage\": \"Fees fetched successfully\",\n    \"data\": {\n        \"feeData\": {\n            \"_id\": \"680f6313f8104539fa850a68\",\n            \"reservationType\": \"2\",\n            \"reservationTypeName\": \"Monthly\",\n            \"price\": 55,\n            \"currency\": \"USD\",\n            \"createdAt\": \"28/04/2025 02:14:27 pm\",\n            \"updatedAt\": \"28/04/2025 02:14:27 pm\"\n        }\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "update fee",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"reservationId\": \"680f6b1a9b68fb02c2efb9ac\",\n    // \"reservationType\": \"5\",\n    // \"reservationTypeName\": \"Yearly\",\n    \"price\": 125,\n    \"currency\": \"EUR\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7777/api/fees",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"fees"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "New Request",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"reservationId\": \"680f6b1a9b68fb02c2efb9ac\",\n    // \"reservationType\": \"5\",\n    // \"reservationTypeName\": \"Yearly\",\n    \"price\": 125,\n    \"currency\": \"EUR\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:7777/api/fees",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "7777",
+									"path": [
+										"api",
+										"fees"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "279"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"117-qMMmSQrArr2Jbfaz4FeMl+CcRig\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 28 Apr 2025 20:00:59 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"responseCode\": 200,\n    \"responseMessage\": \"Fee updated successfully\",\n    \"data\": {\n        \"fee\": {\n            \"_id\": \"680f6b1a9b68fb02c2efb9ac\",\n            \"reservationType\": \"3\",\n            \"reservationTypeName\": \"Quarter-Yearly\",\n            \"price\": 125,\n            \"currency\": \"EUR\",\n            \"createdAt\": \"28/04/2025 02:48:42 pm\",\n            \"updatedAt\": \"28/04/2025 11:00:59 pm\"\n        }\n    }\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Parking Place",
+			"item": [
+				{
+					"name": "get all places",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:7777/api/parking-place?page=1&limit=9",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"parking-place"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "9"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "get all places",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:7777/api/parking-place?page=2&limit=2",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "7777",
+									"path": [
+										"api",
+										"parking-place"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "2"
+										},
+										{
+											"key": "limit",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "577"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"241-Lil7hAJuZnSE2pbfgKRf7hRtaoE\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 28 Apr 2025 13:34:16 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"responseCode\": 200,\n    \"responseMessage\": \"All Parking Places fetched successfully\",\n    \"data\": {\n        \"currentPage\": 2,\n        \"skip\": 2,\n        \"limit\": 2,\n        \"totalPages\": 5,\n        \"totalParkingPlacesForCurrentPage\": 2,\n        \"totalParkingPlaces\": 9,\n        \"parkingPlaces\": [\n            {\n                \"_id\": \"680f798b99ab252b33b2e01a\",\n                \"placeNumber\": \"A3\",\n                \"floorNumber\": 1,\n                \"statusCode\": 1,\n                \"status\": \"available\",\n                \"createdAt\": \"28/04/2025 03:50:19 pm\",\n                \"updatedAt\": \"28/04/2025 03:50:19 pm\"\n            },\n            {\n                \"_id\": \"680f799199ab252b33b2e01d\",\n                \"placeNumber\": \"A4\",\n                \"floorNumber\": 1,\n                \"statusCode\": 1,\n                \"status\": \"available\",\n                \"createdAt\": \"28/04/2025 03:50:25 pm\",\n                \"updatedAt\": \"28/04/2025 03:50:25 pm\"\n            }\n        ]\n    }\n}"
+						},
+						{
+							"name": "get all places",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:7777/api/parking-place?page=1&limit=9",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "7777",
+									"path": [
+										"api",
+										"parking-place"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "limit",
+											"value": "9"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "1752"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"6d8-RN2btdq0j6wbML1ZjJ9n2HFqSCI\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 28 Apr 2025 20:29:08 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"responseCode\": 200,\n    \"responseMessage\": \"All Parking Places fetched successfully\",\n    \"data\": {\n        \"currentPage\": 1,\n        \"skip\": 0,\n        \"limit\": 9,\n        \"totalPages\": 1,\n        \"totalParkingPlacesForCurrentPage\": 9,\n        \"totalParkingPlaces\": 9,\n        \"parkingPlaces\": [\n            {\n                \"_id\": \"680f798599ab252b33b2e017\",\n                \"placeNumber\": \"A2\",\n                \"floorNumber\": 1,\n                \"statusCode\": 1,\n                \"status\": \"available\",\n                \"createdAt\": \"28/04/2025 03:50:13 pm\",\n                \"updatedAt\": \"28/04/2025 03:50:13 pm\"\n            },\n            {\n                \"_id\": \"680f798b99ab252b33b2e01a\",\n                \"placeNumber\": \"A3\",\n                \"floorNumber\": 1,\n                \"statusCode\": 1,\n                \"status\": \"available\",\n                \"createdAt\": \"28/04/2025 03:50:19 pm\",\n                \"updatedAt\": \"28/04/2025 03:50:19 pm\"\n            },\n            {\n                \"_id\": \"680f799199ab252b33b2e01d\",\n                \"placeNumber\": \"A4\",\n                \"floorNumber\": 1,\n                \"statusCode\": 1,\n                \"status\": \"available\",\n                \"createdAt\": \"28/04/2025 03:50:25 pm\",\n                \"updatedAt\": \"28/04/2025 03:50:25 pm\"\n            },\n            {\n                \"_id\": \"680f799799ab252b33b2e020\",\n                \"placeNumber\": \"A5\",\n                \"floorNumber\": 1,\n                \"statusCode\": 1,\n                \"status\": \"available\",\n                \"createdAt\": \"28/04/2025 03:50:31 pm\",\n                \"updatedAt\": \"28/04/2025 03:50:31 pm\"\n            },\n            {\n                \"_id\": \"680f837eaf8f22b7e2c18b57\",\n                \"placeNumber\": \"A6\",\n                \"floorNumber\": 1,\n                \"statusCode\": 1,\n                \"createdAt\": \"28/04/2025 04:31:45 pm\",\n                \"updatedAt\": \"28/04/2025 04:31:45 pm\"\n            },\n            {\n                \"_id\": \"680f797799ab252b33b2e013\",\n                \"placeNumber\": \"B1\",\n                \"floorNumber\": 1,\n                \"statusCode\": 2,\n                \"status\": \"occupied\",\n                \"createdAt\": \"28/04/2025 03:49:59 pm\",\n                \"updatedAt\": \"28/04/2025 11:26:54 pm\"\n            },\n            {\n                \"_id\": \"680f837eaf8f22b7e2c18b58\",\n                \"placeNumber\": \"B1\",\n                \"floorNumber\": 2,\n                \"statusCode\": 1,\n                \"createdAt\": \"28/04/2025 04:31:45 pm\",\n                \"updatedAt\": \"28/04/2025 04:31:45 pm\"\n            },\n            {\n                \"_id\": \"680f8396af8f22b7e2c18b5c\",\n                \"placeNumber\": \"B2\",\n                \"floorNumber\": 2,\n                \"statusCode\": 1,\n                \"createdAt\": \"28/04/2025 04:31:45 pm\",\n                \"updatedAt\": \"28/04/2025 04:31:45 pm\"\n            },\n            {\n                \"_id\": \"680f837eaf8f22b7e2c18b59\",\n                \"placeNumber\": \"c1\",\n                \"floorNumber\": 3,\n                \"statusCode\": 1,\n                \"createdAt\": \"28/04/2025 04:31:45 pm\",\n                \"updatedAt\": \"28/04/2025 04:31:45 pm\"\n            }\n        ]\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "get all available places",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:7777/api/parking-place?page=1&limit=2&status=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"parking-place"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "2"
+								},
+								{
+									"key": "status",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "get all available places",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:7777/api/parking-place?page=1&limit=2&status=1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "7777",
+									"path": [
+										"api",
+										"parking-place"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "limit",
+											"value": "2"
+										},
+										{
+											"key": "status",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "577"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"241-tCuwlPH24X2TOQgDME/9eQWNOPQ\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 28 Apr 2025 19:23:44 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"responseCode\": 200,\n    \"responseMessage\": \"All Parking Places fetched successfully\",\n    \"data\": {\n        \"currentPage\": 1,\n        \"skip\": 0,\n        \"limit\": 2,\n        \"totalPages\": 4,\n        \"totalParkingPlacesForCurrentPage\": 2,\n        \"totalParkingPlaces\": 8,\n        \"parkingPlaces\": [\n            {\n                \"_id\": \"680f798599ab252b33b2e017\",\n                \"placeNumber\": \"A2\",\n                \"floorNumber\": 1,\n                \"statusCode\": 1,\n                \"status\": \"available\",\n                \"createdAt\": \"28/04/2025 03:50:13 pm\",\n                \"updatedAt\": \"28/04/2025 03:50:13 pm\"\n            },\n            {\n                \"_id\": \"680f798b99ab252b33b2e01a\",\n                \"placeNumber\": \"A3\",\n                \"floorNumber\": 1,\n                \"statusCode\": 1,\n                \"status\": \"available\",\n                \"createdAt\": \"28/04/2025 03:50:19 pm\",\n                \"updatedAt\": \"28/04/2025 03:50:19 pm\"\n            }\n        ]\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "get all occupied places",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:7777/api/parking-place?page=1&limit=2&status=2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"parking-place"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "2"
+								},
+								{
+									"key": "status",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "get all occupied places",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:7777/api/parking-place?page=1&limit=2&status=2",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "7777",
+									"path": [
+										"api",
+										"parking-place"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "limit",
+											"value": "2"
+										},
+										{
+											"key": "status",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "396"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"18c-1DQyY7UcRrrMo0c1iW1YZUtTJeo\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 28 Apr 2025 19:25:23 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"responseCode\": 200,\n    \"responseMessage\": \"All Parking Places fetched successfully\",\n    \"data\": {\n        \"currentPage\": 1,\n        \"skip\": 0,\n        \"limit\": 2,\n        \"totalPages\": 1,\n        \"totalParkingPlacesForCurrentPage\": 1,\n        \"totalParkingPlaces\": 1,\n        \"parkingPlaces\": [\n            {\n                \"_id\": \"680f797799ab252b33b2e013\",\n                \"placeNumber\": \"A1\",\n                \"floorNumber\": 1,\n                \"statusCode\": 2,\n                \"status\": \"occupied\",\n                \"createdAt\": \"28/04/2025 03:49:59 pm\",\n                \"updatedAt\": \"28/04/2025 03:49:59 pm\"\n            }\n        ]\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "create parking place",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"newParkingPlaces\": [\n        {\n            \"placeNumber\": \"B2\",\n            \"floorNumber\": 2\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7777/api/parking-place",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"parking-place"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "create parking place",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"newParkingPlaces\": [\n        {\n            \"placeNumber\": \"B2\",\n            \"floorNumber\": 2\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:7777/api/parking-place",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "7777",
+									"path": [
+										"api",
+										"parking-place"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "268"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"10c-DGYXwezdgRjLhhNOsM03bJ6t0aI\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 28 Apr 2025 13:33:10 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"responseCode\": 200,\n    \"responseMessage\": \"Parking Place created successfully\",\n    \"data\": {\n        \"ParkingPlace\": [\n            {\n                \"placeNumber\": \"B2\",\n                \"floorNumber\": 2,\n                \"statusCode\": 1,\n                \"createdAt\": \"28/04/2025 04:31:45 pm\",\n                \"updatedAt\": \"28/04/2025 04:31:45 pm\",\n                \"_id\": \"680f8396af8f22b7e2c18b5c\",\n                \"__v\": 0\n            }\n        ]\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "get parking place by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:7777/api/parking-place/680f797799ab252b33b2e013",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"parking-place",
+								"680f797799ab252b33b2e013"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "get parking place by id",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:7777/api/parking-place/680f797799ab252b33b2e013",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "7777",
+									"path": [
+										"api",
+										"parking-place",
+										"680f797799ab252b33b2e013"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "278"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"116-vsv+mpEcg6v/4tbzojzaKv8f0EA\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 28 Apr 2025 20:04:43 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"responseCode\": 200,\n    \"responseMessage\": \"Parking Place fetched successfully\",\n    \"data\": {\n        \"ParkingPlace\": {\n            \"_id\": \"680f797799ab252b33b2e013\",\n            \"placeNumber\": \"A1\",\n            \"floorNumber\": 1,\n            \"statusCode\": 2,\n            \"status\": \"occupied\",\n            \"createdAt\": \"28/04/2025 03:49:59 pm\",\n            \"updatedAt\": \"28/04/2025 03:49:59 pm\"\n        }\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "get parking place by id Copy",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"placeNumberId\": \"680f797799ab252b33b2e013\",\n    \"placeNumber\": \"B1\",\n    \"floorNumber\": 1,\n    \"statusCode\": 2\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7777/api/parking-place/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"parking-place",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "get parking place by id Copy",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"placeNumberId\": \"680f797799ab252b33b2e013\",\n    \"placeNumber\": \"A1\",\n    \"floorNumber\": 2,\n    \"statusCode\": 2\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:7777/api/parking-place/",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "7777",
+									"path": [
+										"api",
+										"parking-place",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "278"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"116-/Ex6D5MbNQ8Cv3NXppt9i+xUkyQ\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 28 Apr 2025 20:25:49 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"responseCode\": 200,\n    \"responseMessage\": \"Parking Place updated successfully\",\n    \"data\": {\n        \"parkingPlace\": {\n            \"_id\": \"680f797799ab252b33b2e013\",\n            \"placeNumber\": \"A1\",\n            \"floorNumber\": 2,\n            \"statusCode\": 2,\n            \"status\": \"occupied\",\n            \"createdAt\": \"28/04/2025 03:49:59 pm\",\n            \"updatedAt\": \"28/04/2025 11:25:49 pm\"\n        }\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "delete parking place",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:7777/api/parking-place/680f797799ab252b33b2e013?lang=ar",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"parking-place",
+								"680f797799ab252b33b2e013"
+							],
+							"query": [
+								{
+									"key": "lang",
+									"value": "ar"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "delete parking place",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:7777/api/parking-place/680f837eaf8f22b7e2c18b57",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "7777",
+									"path": [
+										"api",
+										"parking-place",
+										"680f837eaf8f22b7e2c18b57"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "85"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"55-SIK0ACKEepYg5gFdz2lLi5LHz+U\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 28 Apr 2025 20:42:53 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"responseCode\": 200,\n    \"responseMessage\": \"Parking Place deleted successfully\",\n    \"data\": {}\n}"
+						},
+						{
+							"name": "delete parking place",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:7777/api/parking-place/680f797799ab252b33b2e013?lang=ar",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "7777",
+									"path": [
+										"api",
+										"parking-place",
+										"680f797799ab252b33b2e013"
+									],
+									"query": [
+										{
+											"key": "lang",
+											"value": "ar"
+										}
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "291"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"123-omyUjWUo6gIP2xk2btcY2O44pFM\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 28 Apr 2025 20:50:28 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"responseCode\": 404,\n    \"responseMessage\": \"لم يتم حذف مكان وقوف السيارات بسبب عدم وجوده أو المشغل بالفعل\",\n    \"fields\": [\n        \"parkingPlace\"\n    ],\n    \"details\": null,\n    \"path\": \"/api/parking-place/680f797799ab252b33b2e013?lang=ar\",\n    \"timestamp\": \"28/04/2025 11:50:28 pm\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Car",
+			"item": [
+				{
+					"name": "create car at place",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"reservationType\": \"5\",\n    \"reservationTypeName\": \"Yearly\",\n    \"price\": 500,\n    \"currency\": \"USD\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7777/api/cars",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"api",
+								"cars"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import User from "../Interfaces/user.interface";
+import User from "../core/Interfaces/user.interface";
 
 
 declare global {

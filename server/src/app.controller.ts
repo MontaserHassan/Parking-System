@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { Controller, Get, Request, Response, } from '@nestjs/common';
 import AppService from './app.service';
-import { ResponseInterface } from './Interfaces/response.interface';
+import { ResponseInterface } from './core/Interfaces/response.interface';
 
 
 

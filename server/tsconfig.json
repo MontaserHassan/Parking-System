@@ -18,7 +18,11 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "typeRoots": [
-      "./src/types",
-    ]
-  }
+      "src/Types",
+    ],
+  },
+  "include": [
+    "src/**/*",
+    "src/Types/**/*"
+  ]
 }
