@@ -7,7 +7,7 @@ import CarsModule from 'src/modules/cars/cars.module';
 import TaxModule from 'src/modules/tax/tax.module';
 import FeesModule from 'src/modules/fees/fees.module';
 import DiscountModule from 'src/modules/discount/discount.module';
-import { Receipt, ReceiptSchema } from './database/receipt.database';
+import { Receipt, ReceiptSchema } from './repository/receipt.repository';
 import ReceiptController from './receipt.controller';
 import ReceiptService from './receipt.service';
 import Util from 'src/modules/Utils/util.util';
@@ -15,16 +15,16 @@ import Util from 'src/modules/Utils/util.util';
 
 
 @Module({
-  imports: [
-    MongooseModule.forFeature([{ name: Receipt.name, schema: ReceiptSchema },]),
-    forwardRef(() => CarsModule),
-    ParkingPlaceModule,
-    FeesModule,
-    TaxModule,
-    DiscountModule,
-  ],
-  controllers: [ReceiptController],
-  providers: [ReceiptService, Util],
-  exports: [ReceiptService,]
+    imports: [
+        MongooseModule.forFeature([{ name: Receipt.name, schema: ReceiptSchema },]),
+        forwardRef(() => CarsModule),
+        ParkingPlaceModule,
+        FeesModule,
+        TaxModule,
+        DiscountModule,
+    ],
+    controllers: [ReceiptController],
+    providers: [ReceiptService, Util],
+    exports: [ReceiptService,]
 })
 export default class ReceiptModule { };

@@ -4,6 +4,7 @@ import { Request, Response } from 'express';
 import { ClientProxy } from '@nestjs/microservices';
 
 import Util from 'src/modules/Utils/util.util';
+import ContactUsService from './contact-us.service';
 import CreateContactUsDto from './dto/create-contact-us.dto';
 
 
@@ -12,7 +13,8 @@ import CreateContactUsDto from './dto/create-contact-us.dto';
 export default class ContactUsController {
   constructor(
     private readonly util: Util,
-    @Inject('RABBITMQ_SERVICE') private readonly client: ClientProxy,
+    private readonly contactUSService: ContactUsService,
+    // @Inject('RABBITMQ_SERVICE') private readonly client: ClientProxy,
   ) { };
 
   @Post('/')
@@ -21,15 +23,16 @@ export default class ContactUsController {
       const messageId = this.util.generateId();
       const emailMessage = {
         email: createContactUsDto.email,
-        userName: createContactUsDto.fullName,
+        userName: createContactUsDto.userName,
         phoneNumber: createContactUsDto.phoneNumber,
-        subject: 'Activate Your ISEG Halal Account',
-        template: 'welcome-your-account.template.html',
+        // subject: 'Activate Your ISEG Halal Account',
+        // template: 'welcome-your-account.template.html',
         messageId: messageId,
         content: createContactUsDto.content,
       };
-      this.client.emit('send_email', emailMessage);
-      this.client.emit('save_message_contact_us', emailMessage);
+      // this.client.emit('send_email', emailMessage);
+      // this.client.emit('save_message_contact_us', emailMessage);
+      await this.contactUSService.create(emailMessage);
       const response = {
         responseCode: 200,
         responseMessage: `Your Request was created successfully and the request number is ${messageId}`,

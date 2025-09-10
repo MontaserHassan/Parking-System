@@ -13,7 +13,7 @@ export default class CreateContactUsDto {
     @IsNotEmpty({ message: 'Full Name is required' })
     @Matches(/^[\u0600-\u06FFa-zA-Z\s]{2,20}$/, { message: 'Full Name must contain letters and min characters is 2, max characters is 20' })
     @Transform(({ value }: TransformFnParams) => value.toLowerCase().trim())
-    fullName: string;
+    userName: string;
 
     @IsEmail({}, { message: "Email must be a valid email" })
     @IsNotEmpty({ message: "Email is required" })

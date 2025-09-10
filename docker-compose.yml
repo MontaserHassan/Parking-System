@@ -1,66 +1,56 @@
-version: '3.8'
+version: "3.9"
 
 services:
-  postgres:
-    image: postgres:15
-    container_name: my_postgres
-    restart: always
-    environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin
-      POSTGRES_DB: mydatabase
+  mongo1:
+    image: mongo:5
+    container_name: mongo1
     ports:
-      - "5432:5432"
-    volumes:
-      - pgdata:/var/lib/postgresql/data
+      - "27017:27017"
+    command: ["mongod", "--replSet", "myReplicaSet", "--bind_ip", "localhost,mongo1"]
     networks:
-      - my-network
+      - mongoCluster
 
-  rabbitmq:
-    image: rabbitmq:3.9.12-management
-    container_name: rabbitmq
-    restart: always
+  mongo2:
+    image: mongo:5
+    container_name: mongo2
     ports:
-      - "5672:5672"     # RabbitMQ main port
-      - "15672:15672"   # RabbitMQ management UI
-    environment:
-      RABBITMQ_DEFAULT_USER: "montaser"
-      RABBITMQ_DEFAULT_PASS: "montaser"
-      RABBITMQ_ERLANG_COOKIE: "secret-cookie"
-    volumes:
-      - rabbitmq_data:/var/lib/rabbitmq   # Persist RabbitMQ data
+      - "27018:27017"
+    command: ["mongod", "--replSet", "myReplicaSet", "--bind_ip", "localhost,mongo2"]
     networks:
-      - my-network
+      - mongoCluster
 
-  app:
-    container_name: my_parking_system
-    build:
-      context: ./server
-      dockerfile: Dockerfile
+  mongo3:
+    image: mongo:5
+    container_name: mongo3
     ports:
-      - "7777:7777"
-    env_file:
-      - ./server/.env 
+      - "27019:27017"
+    command: ["mongod", "--replSet", "myReplicaSet", "--bind_ip", "localhost,mongo3"]
+    networks:
+      - mongoCluster
+
+  mongo-setup:
+    image: mongo:5
+    container_name: mongo-setup
     depends_on:
-      - postgres
-      - rabbitmq
+      - mongo1
+      - mongo2
+      - mongo3
     networks:
-      - my-network
-
-  pgadmin:
-    image: dpage/pgadmin4
-    container_name: pgadmin
-    restart: always
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: admin
-    ports:
-      - "8080:80"
-
-volumes:
-  pgdata:
-  rabbitmq_data:
+      - mongoCluster
+    entrypoint: ["sh", "-c"]
+    command:
+      - |
+        sleep 5
+        mongosh --host mongo1 --eval '
+          rs.initiate({
+            _id: "myReplicaSet",
+            members: [
+              { _id: 0, host: "localhost:27017" },
+              { _id: 1, host: "localhost:27018" },
+              { _id: 2, host: "localhost:27019" }
+            ]
+          })'
 
 networks:
-  my-network: 
+  mongoCluster:
     driver: bridge

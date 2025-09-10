@@ -21,10 +21,8 @@ interface LogData {
     source: string;
     timestamp: string;
     message: string;
-    wfId: string;
-    actionName: string;
-    requestNumber: number;
     object?: any;
+    additionalData?: any;
 };
 
 const levels = {
@@ -88,7 +86,7 @@ function log(type: string, message?: string, object?: any, additionalData?: obje
     additionalData = { ...additionalData, ...object?.res?.locals };
     const logData: LogData = {
         level: type,
-        source: 'Digital-Signature',
+        source: 'Parking-System',
         timestamp: new Date().toISOString(),
         message: message,
         ...objectData,
@@ -119,7 +117,7 @@ function logError(type: string, message: string, object: any, additionalData?: a
     const objectOfAdditionalData = removeEmptyAttributes({ additionalData })
     const logErrorData: LogData = {
         level: type,
-        source: 'Digital-Signature',
+        source: 'Parking-System',
         timestamp: new Date().toISOString(),
         message: message,
         ...objectData,
@@ -135,7 +133,7 @@ function logHttpData(type: string, message: string, requestData: object, respons
     const response = typeof (responseData) === 'string' ? JSON.parse(responseData) : responseData;
     const httpData = {
         level: type,
-        source: 'Digital-Signature',
+        source: 'Parking-System',
         timestamp: new Date().toISOString(),
         message: message,
         request: request,
@@ -150,10 +148,10 @@ function logHttpData(type: string, message: string, requestData: object, respons
 function consoleLog(type: string, message: string, additionalData?: any) {
     const logData: LogData = {
         level: type,
-        source: 'Digital-Signature',
+        source: 'Parking-System',
         timestamp: new Date().toISOString(),
         message: message,
-        ...additionalData
+        additionalData,
     };
     let logString = jsonStringify(logData);
     logString = logString.replace(/"([^"]+)":/g, '$1:');

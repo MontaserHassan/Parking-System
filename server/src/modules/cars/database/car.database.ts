@@ -3,7 +3,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 
 import { ParkingPlace } from 'src/modules/parking-place/database/parking-place.database';
-import { Receipt } from 'src/modules/receipt/database/receipt.database';
+import { Receipt } from 'src/modules/receipt/repository/receipt.repository';
 import { formatDate } from 'src/core/helpers/helper-functions.helper';
 import Status from 'src/core/Interfaces/status.interface';
 

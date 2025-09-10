@@ -1,0 +1,117 @@
+version: '3.9'
+
+services:
+  # postgres:
+  #   image: postgres:15
+  #   container_name: my_postgres
+  #   restart: always
+  #   environment:
+  #     POSTGRES_USER: admin
+  #     POSTGRES_PASSWORD: admin
+  #     POSTGRES_DB: mydatabase
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - pgdata:/var/lib/postgresql/data
+  #   networks:
+  #     - my-network
+
+  rabbitmq:
+    image: rabbitmq:3.9.12-management
+    container_name: rabbitmq
+    restart: always
+    ports:
+      - "5672:5672"     # RabbitMQ main port
+      - "15672:15672"   # RabbitMQ management UI
+    environment:
+      RABBITMQ_DEFAULT_USER: "montaser"
+      RABBITMQ_DEFAULT_PASS: "montaser"
+      RABBITMQ_ERLANG_COOKIE: "secret-cookie"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq   # Persist RabbitMQ data
+    networks:
+      - my-network
+
+  # app:
+  #   container_name: my_parking_system
+  #   build:
+  #     context: ./server
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "7777:7777"
+  #   env_file:
+  #     - ./server/.env 
+  #   depends_on:
+  #     - postgres
+  #     - rabbitmq
+  #   networks:
+  #     - my-network
+
+  # pgadmin:
+  #   image: dpage/pgadmin4
+  #   container_name: pgadmin
+  #   restart: always
+  #   environment:
+  #     PGADMIN_DEFAULT_EMAIL: admin@admin.com
+  #     PGADMIN_DEFAULT_PASSWORD: admin
+  #   ports:
+  #     - "8080:80"
+
+  redis:
+    image: redis:7
+    container_name: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - my-network
+    
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: redis-commander
+    restart: always
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+    ports:
+      - "8081:8081"
+    networks:
+      - my-network
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.13
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+    ports:
+      - "9200:9200"   # REST API
+      - "9300:9300"   # Transport
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    networks:
+      - my-network
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.17.13
+    container_name: kibana
+    ports:
+      - "5601:5601"
+    environment:
+      ELASTICSEARCH_HOSTS: "http://elasticsearch:9200"
+    depends_on:
+      - elasticsearch
+    networks:
+      - my-network
+
+volumes:
+  # pgdata:
+  rabbitmq_data:
+  redis_data:
+  es_data:
+
+
+networks:
+  my-network: 
+    driver: bridge
