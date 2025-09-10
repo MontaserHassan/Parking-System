@@ -32,20 +32,20 @@ services:
     networks:
       - my-network
 
-  # app:
-  #   container_name: my_parking_system
-  #   build:
-  #     context: ./server
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "7777:7777"
-  #   env_file:
-  #     - ./server/.env 
-  #   depends_on:
-  #     - postgres
-  #     - rabbitmq
-  #   networks:
-  #     - my-network
+  app:
+    container_name: my_parking_system
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "7777:7777"
+    env_file:
+      - ./.env
+    depends_on:
+      # - postgres
+      - rabbitmq
+    networks:
+      - my-network
 
   # pgadmin:
   #   image: dpage/pgadmin4
@@ -67,7 +67,7 @@ services:
       - redis_data:/data
     networks:
       - my-network
-    
+
   redis-commander:
     image: rediscommander/redis-commander:latest
     container_name: redis-commander
@@ -105,13 +105,44 @@ services:
     networks:
       - my-network
 
+  mongo:
+    image: mongo:latest
+    container_name: mongo-parking-system
+    restart: always
+    ports:
+    - "27027:27027"
+    command: ["mongod", "--port", "27027"]
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - my-network
+
+  mongo-express:
+    image: mongo-express:latest
+    container_name: mongo-express
+    restart: always
+    ports:
+      - "8082:8081"
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: admin
+      ME_CONFIG_MONGODB_SERVER: mongo
+      ME_CONFIG_MONGODB_PORT: 27027
+    depends_on:
+      - mongo
+    networks:
+      - my-network
+
 volumes:
   # pgdata:
   rabbitmq_data:
   redis_data:
   es_data:
-
+  mongo_data:
 
 networks:
-  my-network: 
+  my-network:
     driver: bridge
