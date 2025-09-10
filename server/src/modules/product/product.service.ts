@@ -2,6 +2,8 @@
 import { Injectable } from '@nestjs/common';
 
 import ProductRepository from './product.repository';
+import RedisUtil from '../Utils/redis.util';
+import Util from '../Utils/util.util';
 import CreateProductDto from './dto/create-product.dto';
 import FilterProductDataDto from './dto/filter-product-data.dto';
 
