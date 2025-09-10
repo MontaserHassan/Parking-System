@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Client } from '@elastic/elasticsearch';
 
 

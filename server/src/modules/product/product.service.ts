@@ -34,15 +34,12 @@ export default class ProductService {
 
     async findWithPagination(filterProductDataDto: FilterProductDataDto, page: number, limit: number,) {
         let totalNumberOfProducts = await this.redisUtil.getListLength('product');
-        console.log('totalNumberOfProducts from redis: ', totalNumberOfProducts);
         if (!totalNumberOfProducts) {
-            const allProducts = await this.productRepository.findAll({});
-            await this.redisUtil.genereateRedisListKey(`product`, allProducts);
+            const allProducts = await this.productRepository.findAll(filterProductDataDto);
+            await this.redisUtil.generateRedisListKey(`product`, allProducts);
             totalNumberOfProducts = await this.redisUtil.getListLength('product');
-            console.log('totalNumberOfProducts from db: ', totalNumberOfProducts);
         };
         const pagination = this.util.pagination(totalNumberOfProducts, Number(page), Number(limit));
-        console.log('pagination: ', pagination);
         const products = await this.redisUtil.getRedisList(`product`, pagination.start, pagination.end);
         return {
             currentPage: pagination.currentPage,

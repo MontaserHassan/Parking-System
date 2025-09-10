@@ -10,15 +10,26 @@ export default class RedisUtil {
 
     constructor() { };
 
+    safeParse(item: string) {
+        try {
+            return JSON.parse(item);
+        } catch (e) {
+            return item;
+        };
+    };
+
     async generateRedisKey(key: string, data: any) {
         const newKey = await redisClient.set(key, JSON.stringify(data), 'EX', 3600);
         return newKey;
     };
 
-    async genereateRedisListKey(key: string, data: any) {
+    async generateRedisListKey(key: string, data: any[]) {
         await this.deleteRedisKey(key);
-        const newKey = redisClient.rpush(key, data, 'EX', 3600);
-        return newKey;
+        const pipeline = redisClient.multi();
+        data.forEach(item => { pipeline.rpush(key, JSON.stringify(item)); });
+        await pipeline.exec();
+        await redisClient.expire(key, 3600);
+        return key;
     };
 
     async addElementToRedisList(key: string, element: any) {
@@ -38,6 +49,8 @@ export default class RedisUtil {
 
     async getRedisList(key: string, start: number, end: number) {
         const data = await redisClient.lrange(key, start, end);
+        const parsedData = data.map(item => this.safeParse(item));
+        console.log('parsedData: ', parsedData);
         return data;
     };
 

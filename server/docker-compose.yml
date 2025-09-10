@@ -37,6 +37,7 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
+    restart: always
     ports:
       - "7777:7777"
     env_file:
