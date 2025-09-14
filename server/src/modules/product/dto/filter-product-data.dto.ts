@@ -19,4 +19,19 @@ export default class FilterProductDataDto {
     @IsOptional({})
     @Transform(({ value }) => value?.trim())
     categoryId?: string;
+
+    @IsString({ message: 'Description must be a string' })
+    @IsOptional({})
+    @Transform(({ value }) => value?.trim())
+    description?: string;
+
+    @IsString({ message: 'Currency must be a string' })
+    @IsOptional({})
+    @Transform(({ value }) => value?.trim())
+    currency?: string;
+
+    @IsString({ message: 'Min price must be a string' })
+    @IsOptional({})
+    @Transform(({ value }) => value?.trim())
+    price?: number;
 };

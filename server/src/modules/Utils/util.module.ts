@@ -9,6 +9,7 @@ import CryptoUtil from './crypto.util';
 import PDFUtil from './pdf.util';
 import MailUtil from './mail.util';
 import RedisUtil from './redis.util';
+import ElasticsearchUtil from './elasticsearch.util';
 
 
 
@@ -18,7 +19,7 @@ import RedisUtil from './redis.util';
         ConfigModule.forRoot({ isGlobal: true, }),
         JwtModule.register({ secret: process.env.JWT_SECRET }),
     ],
-    providers: [PaymentUtil, Util, CryptoUtil, PDFUtil, MailUtil, RedisUtil],
-    exports: [PaymentUtil, Util, CryptoUtil, PDFUtil, MailUtil, RedisUtil],
+    providers: [PaymentUtil, Util, CryptoUtil, PDFUtil, MailUtil, RedisUtil, ElasticsearchUtil],
+    exports: [PaymentUtil, Util, CryptoUtil, PDFUtil, MailUtil, RedisUtil, ElasticsearchUtil],
 })
 export default class UtilModule { };

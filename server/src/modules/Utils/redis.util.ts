@@ -42,6 +42,21 @@ export default class RedisUtil {
         return JSON.parse(data);
     };
 
+    async getRedisKeysByPattern(pattern: string) {
+        const keys = await redisClient.keys(pattern);
+        return keys;
+    };
+
+    async updateValueInsideKey(key: string, id: string, newData: any) {
+        const list = await redisClient.lrange(key, 0, -1);
+        const parsed = list.map(item => JSON.parse(item));
+        const index = parsed.findIndex(item => item._id === id);
+        if (index === -1) return null;
+        parsed[index] = newData;
+        await redisClient.lset(key, index, JSON.stringify(parsed[index]));
+        return parsed[index];
+    };
+
     async getListLength(key: string) {
         const length = await redisClient.llen(key);
         return length;
@@ -50,8 +65,7 @@ export default class RedisUtil {
     async getRedisList(key: string, start: number, end: number) {
         const data = await redisClient.lrange(key, start, end);
         const parsedData = data.map(item => this.safeParse(item));
-        console.log('parsedData: ', parsedData);
-        return data;
+        return parsedData;
     };
 
     async deleteRedisKey(key: string) {

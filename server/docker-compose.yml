@@ -1,6 +1,30 @@
 version: '3.9'
 
 services:
+
+  app:
+    container_name: my_parking_system
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "7777:7777"
+    env_file:
+      - ./.env
+    depends_on:
+      # - postgres
+      mongo:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - my-network
+
   # postgres:
   #   image: postgres:15
   #   container_name: my_postgres
@@ -15,38 +39,12 @@ services:
   #     - pgdata:/var/lib/postgresql/data
   #   networks:
   #     - my-network
-
-  rabbitmq:
-    image: rabbitmq:3.9.12-management
-    container_name: rabbitmq
-    restart: always
-    ports:
-      - "5672:5672"     # RabbitMQ main port
-      - "15672:15672"   # RabbitMQ management UI
-    environment:
-      RABBITMQ_DEFAULT_USER: "montaser"
-      RABBITMQ_DEFAULT_PASS: "montaser"
-      RABBITMQ_ERLANG_COOKIE: "secret-cookie"
-    volumes:
-      - rabbitmq_data:/var/lib/rabbitmq   # Persist RabbitMQ data
-    networks:
-      - my-network
-
-  app:
-    container_name: my_parking_system
-    build:
-      context: ./
-      dockerfile: Dockerfile
-    restart: always
-    ports:
-      - "7777:7777"
-    env_file:
-      - ./.env
-    depends_on:
-      # - postgres
-      - rabbitmq
-    networks:
-      - my-network
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "pg_isready -U admin"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+  #     start_period: 20s
 
   # pgadmin:
   #   image: dpage/pgadmin4
@@ -57,6 +55,46 @@ services:
   #     PGADMIN_DEFAULT_PASSWORD: admin
   #   ports:
   #     - "8080:80"
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+  #   networks:
+  #     - my-network
+
+  debezium:
+    image: debezium/server:2.7.2.Final
+    container_name: debezium
+    environment:
+      # --- MongoDB Connector Config ---
+      DEBEZIUM_SOURCE_CONNECTOR_CLASS: io.debezium.connector.mongodb.MongoDbConnector
+      DEBEZIUM_SOURCE_CONFIG: |-
+        {
+          "mongodb.hosts": "rs0/mongo:27027",
+          "mongodb.name": "parking_cdc",
+          "mongodb.user": "admin",
+          "mongodb.password": "pass",
+          "database.include.list": "mydatabase"
+        }
+
+      # --- Sink: RabbitMQ ---
+      DEBEZIUM_SINK_TYPE: rabbitmq
+      DEBEZIUM_SINK_RABBITMQ_CONNECTION_HOST: rabbitmq
+      DEBEZIUM_SINK_RABBITMQ_CONNECTION_PORT: 5672
+      DEBEZIUM_SINK_RABBITMQ_CONNECTION_USER: montaser
+      DEBEZIUM_SINK_RABBITMQ_CONNECTION_PASSWORD: montaser
+      DEBEZIUM_SINK_RABBITMQ_EXCHANGE: debezium-exchange
+      DEBEZIUM_SINK_RABBITMQ_ROUTING_KEY: parking.cdc
+
+      # --- Format ---
+      DEBEZIUM_FORMAT_VALUE: json
+      DEBEZIUM_FORMAT_KEY: json
+    depends_on:
+      mongo:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - my-network
 
   redis:
     image: redis:7
@@ -68,6 +106,12 @@ services:
       - redis_data:/data
     networks:
       - my-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
   redis-commander:
     image: rediscommander/redis-commander:latest
@@ -77,6 +121,9 @@ services:
       - REDIS_HOSTS=local:redis:6379
     ports:
       - "8081:8081"
+    depends_on:
+      redis:
+        condition: service_healthy
     networks:
       - my-network
 
@@ -93,6 +140,12 @@ services:
       - es_data:/usr/share/elasticsearch/data
     networks:
       - my-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9200/_cluster/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
 
   kibana:
     image: docker.elastic.co/kibana/kibana:7.17.13
@@ -102,7 +155,8 @@ services:
     environment:
       ELASTICSEARCH_HOSTS: "http://elasticsearch:9200"
     depends_on:
-      - elasticsearch
+      elasticsearch:
+        condition: service_healthy
     networks:
       - my-network
 
@@ -115,11 +169,17 @@ services:
     command: ["mongod", "--port", "27027"]
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: admin
+      MONGO_INITDB_ROOT_PASSWORD: pass
     volumes:
       - mongo_data:/data/db
     networks:
       - my-network
+    healthcheck:
+      test: ["CMD-SHELL", "pgrep mongod || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
 
   mongo-express:
     image: mongo-express:latest
@@ -129,11 +189,34 @@ services:
       - "8082:8081"
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: admin
-      ME_CONFIG_MONGODB_ADMINPASSWORD: admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: pass
       ME_CONFIG_MONGODB_SERVER: mongo
       ME_CONFIG_MONGODB_PORT: 27027
     depends_on:
-      - mongo
+      mongo:
+        condition: service_healthy
+    networks:
+      - my-network
+
+  rabbitmq:
+    image: rabbitmq:3.9.12-management
+    container_name: rabbitmq
+    restart: always
+    ports:
+      - "5672:5672"     # RabbitMQ main port
+      - "15672:15672"   # RabbitMQ management UI
+    environment:
+      RABBITMQ_DEFAULT_USER: "montaser"
+      RABBITMQ_DEFAULT_PASS: "montaser"
+      RABBITMQ_ERLANG_COOKIE: "secret-cookie"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "status"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
     networks:
       - my-network
 
