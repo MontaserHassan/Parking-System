@@ -12,6 +12,7 @@ import CarsModule from './modules/cars/cars.module';
 import ContactUsModule from './modules/contact-us/contact-us.module';
 import DiscountModule from './modules/discount/discount.module';
 import FeesModule from './modules/fees/fees.module';
+import OpenaiModule from './modules/openai/openai.module';
 import NewsModule from './modules/news/news.module';
 import ParkingPlaceModule from './modules/parking-place/parking-place.module';
 import ProductModule from './modules/product/product.module';
@@ -37,6 +38,7 @@ import logger from './config/logger.config';
         DiscountModule,
         TaxModule,
         ProductModule,
+        OpenaiModule,
         // RabbitMqmoduleModule,
     ],
     controllers: [AppController,],
@@ -46,7 +48,7 @@ export default class AppModule {
 
     constructor() {
         mongoose.set('debug', (collectionName: string, method: string, query: any, doc: any) => {
-        logger.logInfo('Database Query Executed', { collectionName, method, query, doc, });
+            logger.logInfo('Database Query Executed', { collectionName, method, query, doc, });
         });
     };
 
