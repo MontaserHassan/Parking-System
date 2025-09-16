@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import axios from 'axios';
+import { Groq } from 'groq-sdk';
 
 import PDFUtil from 'src/modules/Utils/pdf.util';
 // import openai from 'src/config/openai.config';
@@ -22,7 +23,6 @@ export default class OpenaiService {
   async generateInventorySummary(): Promise<string> {
     try {
       const products = await this.productRe.findAll({});
-      console.log('products: ', products);
       const prompt = `
       You are an assistant that writes professional product descriptions for an online shop.
       Here is the product data in JSON format:
@@ -41,17 +41,37 @@ export default class OpenaiService {
       //   messages: [{ role: 'user', content: prompt }],
       //   max_tokens: 700
       // });
-      const response = await axios.post(
-        this.baseUrl,
-        {
-          model: 'meta-llama/llama-4-scout-17b-16e-instruct', // Free supported model
-          messages: [{ role: 'user', content: prompt }],
-          temperature: 0.7,
-          max_tokens: 700,
+      const groq = new Groq();
+      const chatCompletion = await groq.chat.completions.create({
+        "messages": [
+          {
+            "role": "user",
+            "content": prompt
+          }
+        ],
+        "model": "deepseek-r1-distill-llama-70b",
+        "temperature": 0.6,
+        "max_completion_tokens": 131072,
+        "top_p": 0.95,
+        "stream": false,
+        "response_format": {
+          "type": "json_object"
         },
-        { headers: { Authorization: `Bearer ${this.apiKey}`, 'Content-Type': 'application/json', } },
-      );
-      const summary = response.data.choices?.[0]?.message?.content?.trim() ?? 'No summary generated';
+        "stop": null
+      });
+      console.log('chatCompletion: ', chatCompletion);
+      const summary = chatCompletion.choices[0]?.message?.content?.trim() ?? 'No summary generated'
+      // const response = await axios.post(
+      //   this.baseUrl,
+      //   {
+      //     model: 'meta-llama/llama-4-scout-17b-16e-instruct', // Free supported model
+      //     messages: [{ role: 'user', content: prompt }],
+      //     temperature: 0.7,
+      //     max_tokens: 700,
+      //   },
+      //   { headers: { Authorization: `Bearer ${this.apiKey}`, 'Content-Type': 'application/json', } },
+      // );
+      // const summary = response.data.choices?.[0]?.message?.content?.trim() ?? 'No summary generated';
       console.log('summary: ', summary);
       const pdf = await this.pdfUtil.createPDF(summary);
       return pdf;
